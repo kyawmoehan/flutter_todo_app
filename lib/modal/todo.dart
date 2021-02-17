@@ -6,7 +6,7 @@ class Todo {
   final String title;
   final DateTime date;
   final TimeOfDay time;
-  final bool complete;
+  bool complete;
 
   Todo({
     @required this.id,
