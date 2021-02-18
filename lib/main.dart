@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './modal/todo.dart';
 import './widget/todo_list.dart';
 import './widget/today_card.dart';
+import './widget/new_todo.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,6 +49,31 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  int get _todayTodo {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    var getTodayTodo = _todoList.where((todo) {
+      final dateToCheck = todo.date;
+      return today ==
+          DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+    });
+    print(getTodayTodo.length);
+    return getTodayTodo.length;
+  }
+
+  void _addNewTodo(String title, DateTime chosenDate, TimeOfDay chosenTime) {
+    final newTodo = Todo(
+      id: DateTime.now().toString(),
+      title: title,
+      date: chosenDate,
+      time: chosenTime,
+      complete: false,
+    );
+    setState(() {
+      _todoList.insert(0, newTodo);
+    });
+  }
+
   void _deleteTodo(String id) {
     setState(() {
       _todoList.removeWhere((todo) => todo.id == id);
@@ -61,6 +87,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _startAddNewTodo(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (_) {
+          return NewTodo(_addNewTodo);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => {},
+            onPressed: () => {_startAddNewTodo(context)},
           )
         ],
       ),
@@ -77,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            TodayCard(),
+            TodayCard(_todayTodo),
             TodoList(_todoList, _deleteTodo, _changeComplete),
           ],
         ),
@@ -85,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => {},
+        onPressed: () => {_startAddNewTodo(context)},
       ),
     );
   }
