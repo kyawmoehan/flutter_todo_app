@@ -25,21 +25,28 @@ class TodoList extends StatelessWidget {
                 final dateToCheck = todos[index].date;
                 final aDate = DateTime(
                     dateToCheck.year, dateToCheck.month, dateToCheck.day);
-                return Card(
-                  child: ListTile(
-                    leading: Checkbox(
-                      onChanged: (bool) =>
-                          {changeComplete(todos[index].id, bool)},
-                      value: todos[index].complete,
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.white70, width: 1),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    title: Text(todos[index].title),
-                    subtitle: Text(
-                      '${todos[index].time.format(context)} : ${today == aDate ? "Today" : DateFormat.yMMMd().format(todos[index].date)}',
-                    ),
-                    trailing: IconButton(
-                      onPressed: () => deleteTodo(todos[index].id),
-                      icon: Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
+                    child: ListTile(
+                      leading: Checkbox(
+                        onChanged: (bool) =>
+                            {changeComplete(todos[index].id, bool)},
+                        value: todos[index].complete,
+                      ),
+                      title: Text(todos[index].title),
+                      subtitle: Text(
+                        '${todos[index].time.format(context)} : ${today == aDate ? "Today" : DateFormat.yMMMd().format(todos[index].date)}',
+                      ),
+                      trailing: IconButton(
+                        onPressed: () => deleteTodo(todos[index].id),
+                        icon: Icon(Icons.delete),
+                        color: Theme.of(context).errorColor,
+                      ),
                     ),
                   ),
                 );

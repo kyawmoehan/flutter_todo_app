@@ -49,16 +49,15 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
-  int get _todayTodo {
+  List<Todo> get _todayTodo {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     var getTodayTodo = _todoList.where((todo) {
       final dateToCheck = todo.date;
       return today ==
           DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
-    });
-    print(getTodayTodo.length);
-    return getTodayTodo.length;
+    }).toList();
+    return getTodayTodo;
   }
 
   void _addNewTodo(String title, DateTime chosenDate, TimeOfDay chosenTime) {
@@ -89,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _startAddNewTodo(BuildContext ctx) {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: ctx,
         builder: (_) {
           return NewTodo(_addNewTodo);
@@ -111,7 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            TodayCard(_todayTodo),
+            Container(
+              child: TodayCard(_todayTodo),
+            ),
             TodoList(_todoList, _deleteTodo, _changeComplete),
           ],
         ),

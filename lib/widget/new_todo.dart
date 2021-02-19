@@ -54,7 +54,12 @@ class _NewTodoState extends State<NewTodo> {
       child: Card(
         elevation: 5,
         child: Container(
-          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
