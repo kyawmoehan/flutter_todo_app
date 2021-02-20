@@ -25,7 +25,7 @@ class TodayCard extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Text(
                 'Things To Do',
-                style: TextStyle(fontSize: 22),
+                style: Theme.of(context).textTheme.title,
               ),
             ),
             Container(
@@ -33,7 +33,8 @@ class TodayCard extends StatelessWidget {
               decoration: BoxDecoration(
                 // color: Color(0xFFB74093),
                 shape: BoxShape.circle,
-                border: Border.all(width: 2.5, color: Colors.blue),
+                border: Border.all(
+                    width: 2.5, color: Theme.of(context).accentColor),
               ),
               padding: EdgeInsets.all(20),
               child: Text(
