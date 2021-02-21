@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import './modal/todo.dart';
@@ -84,6 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  bool _showCard = false;
+
   List<Todo> get _todayTodo {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -132,32 +135,85 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => {_startAddNewTodo(context)},
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
+    final mediaQuery = MediaQuery.of(context);
+    final isLandScape = mediaQuery.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget appBar = AppBar(
+      title: Text('Todo'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => {_startAddNewTodo(context)},
+        )
+      ],
+    );
+
+    final todoListWidget = Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: TodoList(_todoList, _deleteTodo, _changeComplete),
+    );
+
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              child: TodayCard(_todayTodo),
-            ),
-            TodoList(_todoList, _deleteTodo, _changeComplete),
+            if (isLandScape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Show Card',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                  Switch.adaptive(
+                    activeColor: Theme.of(context).accentColor,
+                    onChanged: (val) {
+                      setState(() {
+                        _showCard = val;
+                      });
+                    },
+                    value: _showCard,
+                  ),
+                ],
+              ),
+            if (!isLandScape)
+              Container(
+                height: (mediaQuery.size.height -
+                        appBar.preferredSize.height -
+                        mediaQuery.padding.top) *
+                    0.3,
+                child: TodayCard(_todayTodo),
+              ),
+            if (!isLandScape) todoListWidget,
+            if (isLandScape)
+              _showCard
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.7,
+                      child: TodayCard(_todayTodo),
+                    )
+                  : todoListWidget,
           ],
         ),
       ),
+    );
+
+    return Scaffold(
+      appBar: appBar,
+      body: pageBody,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => {_startAddNewTodo(context)},
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => {_startAddNewTodo(context)},
+            ),
     );
   }
 }

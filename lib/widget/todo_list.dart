@@ -26,7 +26,7 @@ class TodoList extends StatelessWidget {
                     height: 25,
                   ),
                   Container(
-                    // height: constraints.maxHeight * 0.6,
+                    height: constraints.maxHeight * 0.6,
                     child: Image.asset(
                       'assets/images/waiting.png',
                       fit: BoxFit.cover,
