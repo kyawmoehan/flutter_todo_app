@@ -36,10 +36,10 @@ class TodayCard extends StatelessWidget {
                 border: Border.all(
                     width: 2.5, color: Theme.of(context).accentColor),
               ),
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(15),
               child: Text(
                 '${todayTodo.length.toString()}',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
             ),
           ],
